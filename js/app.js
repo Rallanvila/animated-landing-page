@@ -160,17 +160,54 @@ const initialPageAnimation = () =>{
     );
 }
 
+const delay = (n) => {
+  return new Promise((done) => {
+    setTimeout(() => {
+      done();
+    }, n)
+  })
+}
+const loadingLeave = () =>{
+  let timeline = gsap.timeline();
+  timeline.fromTo('.loading-bg', {
+    y: '100%'
+  }, {
+    y: 0,
+    duration: 1
+
+  })
+}
+const loadingEnter = () =>{
+  let timeline = gsap.timeline();
+  timeline.fromTo('.loading-bg', {
+    y: 0
+  }, {
+    y: '100%',
+    duration: 1
+
+  })
+}
+
 
 barba.init({
   sync: true,
   transitions: [
     {
       name: 'page-wipe',
-      async ListeningStateChangedEvent(data){
+      async leave(data){
+        const done= this.async();
         console.log('leaving page animation')
+        loadingLeave();
+        await delay(2000);
+        done();
       },
-      async CustomElementRegistry(data){
+      async enter(data){
+        loadingEnter();
+        initialPageAnimation()
         console.log('entering page animation')
+      }, 
+      async once(data){
+        initialPageAnimation()
       }
     }
   ]
