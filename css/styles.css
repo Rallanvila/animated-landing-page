@@ -209,6 +209,23 @@ header .menu li a{
 #gallery .white-bg ul li{
   justify-self: center;
   align-self: center;
+  position: relative;
+  height: 300px;
+  overflow: hidden;
+  cursor: pointer;
+}
+#gallery .white-bg ul li .hover-bg{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 300px;
+  background: rgba(0, 0, 0, .5);
+  transition: all .4s ease-in-out;
+  cursor: pointer;
+}
+#gallery .white-bg ul li:hover .hover-bg{
+  transform: translate(0, 100%);
 }
 #gallery .white-bg img{
   width: 100%;
