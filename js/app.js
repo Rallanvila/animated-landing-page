@@ -1,3 +1,5 @@
+// const { default: gsap } = require("gsap/gsap-core");
+
 const initialPageAnimation = () =>{
 
   let tl = gsap.timeline()
@@ -188,6 +190,38 @@ const loadingEnter = () =>{
   })
 }
 
+const galleryEnter = () => {
+  let timeline = gsap.timeline();
+  timeline
+  .fromTo(
+    '.white-bg', 
+  {
+    y: 50, 
+    opacity: 0,
+  },
+  {
+    y: 0, 
+    opacity: 1,
+    duration: .8, 
+    ease: 'power1.inOut'
+  }
+  )
+  .fromTo(
+    '.white-bg ul li', 
+    {
+      y: 50, 
+      opacity: 0
+    },
+    {
+      y: 0, 
+      opacity: 1,
+      duration: .4, 
+      stagger: .2, 
+      ease: 'power1.inOut'
+    }
+  )
+}
+galleryEnter()
 
 barba.init({
   sync: true,
@@ -209,6 +243,43 @@ barba.init({
       async once(data){
         initialPageAnimation()
       }
+    },
+    {
+      name: 'gallery-transition',
+      from: {
+        namespace: ['home', 'about']
+      }, 
+      to: {
+        namespace: ['gallery']
+      },
+      async leave(data){
+        const done= this.async();
+        console.log('leaving page animation')
+        loadingLeave();
+        await delay(1500);
+        done();
+      },
+      async enter(data){
+        loadingEnter();
+        galleryEnter();
+        console.log('entering page animation')
+      }, 
+      async once(data){
+        initialPageAnimation()
+      }
     }
-  ]
+  ], 
+  views: [
+  //   {
+  //   namespace: 'index',
+  //   beforeLeave(data) {
+  //     // do something before leaving the current `index` namespace
+  //   }
+  // }, 
+  {
+    namespace: 'gallery',
+    afterEnter(data) {
+      // do something before entering the `contact` namespace
+    }
+  }]
 })
